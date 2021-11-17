@@ -1,8 +1,10 @@
 # js-url-shortener
 Free to use JavaScript URL shortener, hostable on GitHub pages
 
-## Ultra-fast redirect time (avg redirect time < 1 sec)
+## Ultra-fast redirect time (avg redirect time < 1 sec)*
 ![](ezgif.com-gif-maker(7).gif)
+
+* redirect time will depend on browser speed and computer performance, but the deviation from under 1 second will usually be negligible
 
 ### This should ideally be hosted on GitHub pages sites with subpages named "r" or "redirect"
 - It's hosted like this on my GitHub pages
