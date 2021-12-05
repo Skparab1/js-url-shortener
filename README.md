@@ -6,6 +6,12 @@ Free to use JavaScript URL shortener, hostable on GitHub pages
 
 * redirect time will depend on browser speed and computer performance, but the deviation from under 1 second will usually be negligible
 
+## Cool features
+- Ultra fast redirect time
+- built in animations (randomized)
+- message display
+- auto refresh (if you click the back button it goest back to and stays on the page, and it it stays for more than 3 second it will automatically refresh and redirect)
+
 ### This should ideally be hosted on GitHub pages sites with subpages named "r" or "redirect"
 - It's hosted like this on my GitHub pages
 - This will make the shortened URL pretty short, <username>.github.>io/r/<keyword>
