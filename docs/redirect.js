@@ -5,6 +5,9 @@ function preload() {
 var keyword;
 var url;
 var tickercount = -155;
+var pwdchallenge = false;
+var foundpwd = '';
+var openwindow = '';
 
 const getDeviceType = () => {
   const ua = navigator.userAgent;
@@ -31,53 +34,65 @@ function setup() {
   }
   keyword = redirect.getColumn(0);
   url = redirect.getColumn(1);
+  pswd = redirect.getColumn(2);
   
-loc = window.location.href;
-
-var foundredirect = false;
-var tickercount = 0;
-
-print(keyword);
-
-if (loc.includes('https://skparab1.github.io/r/')){
-  red = loc.replace('https://skparab1.github.io/r/','');
+  loc = window.location.href;
   
-  i = 0;
-  scanner = '';
-  while (i <= keyword.length && foundredirect == false){
-    scanner = keyword[i];
-    if (scanner == red){
-      foundredirect = true;
-      openwindow = url[i];
-      openwindow = openwindow.replace("https://",'');
-      openwindow = 'https://'+openwindow;
+  var foundredirect = false;
+  var tickercount = 0;
+  
+  print(keyword);
+  
+  if (loc.includes('https://skparab1.github.io/p/')){
+    red = loc.replace('https://skparab1.github.io/p/','');
+    
+    console.log('was in and should have gotten password');
+    
+    i = 1;
+    scanner = '';
+    while (i <= keyword.length && foundredirect == false){
+      scanner = keyword[i];
+      if (scanner == red){
+        foundredirect = true;
+        foundpwd = pswd[i];
+        openwindow = url[i];
+        openwindow = openwindow.replace("https://",'');
+        openwindow = 'https://'+openwindow;
+      }
+      
+      i += 1;
     }
     
-    i += 1;
-  }
+    if (foundpwd == ''){
+      pwdchallenge = true;
+    } else {
+      pwdchallenge = false;
+    }
+    
+    if (foundredirect && pwdchallenge){
+      //location.href = openwindow;
+      window.open(openwindow,"_self");
+    } else if (!foundredirect){
+      window.open("https://skparab1.github.io/wrongredirect","_self");
+    }
+    
+    
+    background(0);
+    textSize(25);
+    stroke(0);
+    fill(255);
+    strokeWeight(3);
+    
+    text('Redirecting to your requested webpage......',100,75);
+    text('This shouldn\'t take too long',100,110);
   
-  if (foundredirect){
-    //location.href = openwindow;
-    window.open(openwindow,"_self");
+    
   } else {
-    window.open("https://skparab1.github.io/wrongredirect","_self");
+    //window.open("http:skparab1.github.io/wrongredirect","_self");
   }
-  
-  
-  background(0);
-  textSize(25);
-  stroke(0);
-  fill(255);
-  strokeWeight(3);
-  
-  text('Redirecting to your requested webpage......',100,75);
-  text('This shouldn\'t take too long',100,110);
+}
 
-  
-} else {
-  //window.open("http:skparab1.github.io/wrongredirect","_self");
-}
-}
+console.log('done with setup');
 
 var t = 0;
 var which;
@@ -94,13 +109,150 @@ var changingsize = 0;
 var displayword = 0;
 var autorefresh = 0;
 var frate = 0;
+var code = '';
+var redirecttimer = 0;
+var dimmer = 0;
+var authinterface = 'default';
+var authenticator = 'username';
+var username = '';
+var password = '';
+var incorrect = 100;
+var backspacer = 0;
+
+console.log(foundpwd);
+
+function drawnicerect(x,y,xsize,ysize,incolor,outcolor){
+  let xchange = x-250;
+  let ychange = y-15;
+  let xsizechange = xsize-200;
+  let ysizechange = ysize-60;
+  
+  fill(incolor);
+  stroke(outcolor);
+  rect(250+xchange,15+ychange,xsize,ysize);
+  fill(outcolor);
+  stroke(outcolor);
+  rect(250+xchange,15+ychange,15,15);
+  rect(250+xchange,60+ychange+ysizechange,15,15);
+  rect(435+xchange+xsizechange,15+ychange,15,15);
+  rect(435+xchange+xsizechange,60+ychange+ysizechange,15,15);
+  fill(incolor);
+  stroke(incolor);
+  ellipse(265+xchange,30+ychange,24.5,24.5);
+  ellipse(435+xchange+xsizechange,30+ychange,24.5,24.5);
+  ellipse(265+xchange,60+ychange+ysizechange,24.5,24.5);
+  ellipse(435+xchange+xsizechange,60+ychange+ysizechange,24.5,24.5);
+}
 
 function draw(){
+  
+  console.log('in draw');
+  resizeCanvas(windowWidth, windowHeight);
+  
+  if (!pwdchallenge){
+    if (keyIsDown(BACKSPACE) || keyIsDown(DELETE)){
+      backspacer += 1;
+      
+      if (backspacer % 20 == 0){
+        keyCode = BACKSPACE;
+        keyReleased();
+      }
+    }
+    
+    if (authinterface == 'default'){
+      background(0);
+      
+      drawnicerect(250,150,500,65,200-dimmer,0);
+      fill(0,255-dimmer,100-dimmer);
+      stroke(0,0,0);
+      textSize(50);
+      text('This Webpage has restricted access',100,75);
+      textSize(35);
+      text('Enter access code to continue',250,120);
+      fill(255-dimmer,0,0);
+      stroke(200-dimmer);
+      text(code,260,195);
+      
+      if (mouseX > 250 && mouseX < 750 && mouseY > 300 && mouseY < 365){
+        drawnicerect(250,300,500,65,75,0);
+      } else {
+        drawnicerect(250,300,500,65,0,0);
+      }
+      fill(0);
+      text('Alternate universal login',300,345);
+      
+      if (code == foundpwd){
+        dimmer += 10;
+      }
+      if (code == foundpwd && redirecttimer == 0 && dimmer == 150){
+        window.open(openwindow,"_self"); 
+        pwdchallenge = true;
+        redirecttimer += 1;
+      }
+    } else {
+      background(0);
+      
+      if (authenticator == 'username'){
+        drawnicerect(250,150,500,65,225,0);
+        drawnicerect(250,235,500,65,150,0);
+      } else {
+        drawnicerect(250,150,500,65,150,0);
+        drawnicerect(250,235,500,65,225,0);
+      }
+      fill(0,255-dimmer,100-dimmer);
+      stroke(0,0,0);
+      textSize(50);
+      text('This Webpage has restricted access',100,75);
+      textSize(35);
+      text('Please Authenticate',300,120);
+      text('Username        ',75,190);
+      text('Password        ',75,280);
+      fill(255-dimmer,0,0);
+      stroke(200-dimmer);
+      text(username,260,195);
+      
+      incorrect += 1;
+      if (incorrect < 100){
+        stroke(0);
+        textSize(20);
+        text('Username or password incorrect',260,320);
+      }
+      
+      stroke(255);
+      textSize(35);
+      let displaypass = '';
+      let y = 0;
+      while (y < password.length){
+        displaypass += '•';
+        y += 1;
+      }
+      text(displaypass,260,195+90);
+      
+      if (username != '' && password != ''){
+        drawnicerect(380,335,240,65,[255,200,0],0);
+        fill(0);
+        stroke(255,200,0);
+        text('Authenticate',405,380);
+      } else if (mouseX > 400 && mouseX < 600 && mouseY > 335 && mouseY < 400){
+        drawnicerect(400,335,200,65,150,0);
+        fill(0);
+        stroke(0);
+        text('Go back',430,380);
+      } else {
+        drawnicerect(400,335,200,65,100,0);
+        fill(0);
+        stroke(0);
+        text('Go back',430,380);
+      }
+      
+    }
+  } else {
   if (device != 'mobile'){
     resizeCanvas(windowWidth, windowHeight);
   }
+
   background(0);
- 
+  
   blue = (255-Math.abs(255-changingcolor))+100; //   0          255              
   green = (255-Math.abs(510-changingcolor))+100; // 100        100 
   red = (255-Math.abs(765-changingcolor))+100; //  255         0       
@@ -352,5 +504,60 @@ function draw(){
   ball2 += 10;
   if (ball2 > 300){
     ball2 = -100;
+  }
+  }
+}
+
+function keyPressed(){
+  if (keyCode != BACKSPACE && keyCode != DELETE && keyCode != ENTER && key != 'Meta' && key != 'Alt' && key != 'Control' && key != 'Shift' && key != 'CapsLock' && key != 'Tab' && key != 'ArrowUp' && key != 'ArrowDown' && key != 'ArrowLeft' && key != 'ArrowRight'){
+    if (authinterface == 'default'){
+      code += key;
+    } else if (authinterface == 'authentication' && authenticator == 'username'){
+      username += key;
+    } else if (authinterface == 'authentication' && authenticator == 'password'){
+      password += key;
+    }
+  }
+  if (key == 'ArrowUp' || key == 'ArrowDown' || key == 'ArrowLeft' || key == 'ArrowRight'){
+    authinterface = 'authentication';
+  }
+}
+
+function keyReleased(){
+  if (keyCode == ENTER){
+    // go
+    if (authinterface == 'authentication' && authenticator == 'username'){
+      authenticator = 'password';
+      keyCode = '';
+    } else if (authinterface == 'authentication' && authenticator == 'password'){
+      if (username == keyword[0] && password == pswd[0]){
+        pwdchallenge = true;
+        window.open(openwindow,"_self"); 
+      } else {
+        incorrect = 0;
+      }
+    }
+  }
+  if (keyCode == BACKSPACE || keyCode == DELETE){
+    if (authinterface == 'default'){
+      code = code.substring(0, code.length -1);
+    } else if (authinterface == 'authentication' && authenticator == 'username'){
+      username = username.substring(0, username.length -1);
+    } else if (authinterface == 'authentication' && authenticator == 'password'){
+      password = password.substring(0, password.length -1);
+    }
+
+  }
+}
+
+function mousePressed(){
+  if (mouseX > 250 && mouseX < 750 && mouseY > 300 && mouseY < 365 && authinterface == 'default'){    
+    authinterface = 'authentication';
+  } else if (mouseX > 400 && mouseX < 600 && mouseY > 335 && mouseY < 400 && authinterface == 'authentication'){
+    authinterface = 'default';
+  } else if (mouseX > 250 && mouseX < 750 && mouseY > 150 && mouseY < 150+65 && authinterface == 'authentication'){    
+    authenticator = 'username';
+  } else if (mouseX > 250 && mouseX < 750 && mouseY > 235 && mouseY < 300 && authinterface == 'authentication'){    
+    authenticator = 'password';
   }
 }
