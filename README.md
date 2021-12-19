@@ -14,7 +14,7 @@ Free to use JavaScript URL shortener, hostable on GitHub pages
 - password site access
   - for password enabled redirects, user will be prompted to enter password
   - alternate authentication - for you to be able to access all the redirects without the passwords to each one
-  - modify username and password in csv file
+  - modify username and password in redirects.csv file
 
 ### This should ideally be hosted on GitHub pages sites with subpages named "r" or "redirect"
 - It's hosted like this on my GitHub pages
