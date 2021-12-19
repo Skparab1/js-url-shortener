@@ -11,7 +11,7 @@ Free to use JavaScript URL shortener, hostable on GitHub pages
 - built in animations (randomized)
 - message display
 - auto refresh (if you click the back button it goest back to and stays on the page, and it it stays for more than 3 second it will automatically refresh and redirect)
-- password site access (for 
+- password site access (for this to be use
   - for password enabled redirects, user will be prompted to enter password
   - alternate authentication - for you to be able to access all the redirects without the passwords to each one
   - modify username and password in redirects.csv file
