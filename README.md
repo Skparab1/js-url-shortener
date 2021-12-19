@@ -24,7 +24,7 @@ Free to use JavaScript URL shortener, hostable on GitHub pages
 # How to use:
   1. Fork this repo and rename it "r" or "redirect" (shorter is better, see above)
     - alternatively, you could copy the folder named "r" or "redirect" and put it in your <username>.github.io repo
-  2. Edit the accounts.csv file to add keywords and urls which will be used. (put passwords in the third column, but those are optional and can be 
+  2. Edit the accounts.csv file to add keywords and urls which will be used. (put passwords in the third column, but those are optional and can be left blank
   3. All done! Star this repo if you like it or use it
   
 # Other things:
