@@ -29,4 +29,4 @@ Free to use JavaScript URL shortener, hostable on GitHub pages
   
 # Other things:
   1. For a more comprehensive explanation, see this article (not done yet)
-  2. This Redirector uses 4, which can be easily modified by editing the file.
+  2. This Redirector uses 4 realtively simple, which can be easily modified by editing the file.
